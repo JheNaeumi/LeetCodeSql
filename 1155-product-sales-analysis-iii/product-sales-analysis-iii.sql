@@ -4,18 +4,28 @@
 -- left join product p
 -- on s.product_id = p.product_id
 -- group by s.product_id
-with minYear as (
-    select s.product_id,min(s.year) as fyear
-    from sales s
-    group by s.product_id
-),
-groupProd as (
-    select s.product_id ,s.year, s.quantity, s.price
-    from sales s
-    left join product p
-    on s.product_id = p.product_id
+-- with minYear as (
+--     select s.product_id,min(s.year) as fyear
+--     from sales s
+--     group by s.product_id
+-- ),
+-- groupProd as (
+--     select s.product_id ,s.year, s.quantity, s.price
+--     from sales s
+--     left join product p
+--     on s.product_id = p.product_id
+-- )
+-- select s.product_id, s.year as first_year, s.quantity, s.price
+-- from minYear m
+-- left join groupProd s
+-- on m.fyear = s.year and m.product_id = s.product_id
+
+SELECT s.product_id,s.year AS first_year,quantity,s.price
+FROM Sales s
+WHERE  year IN
+(
+    SELECT MIN(year)
+    FROM Sales s2
+    where s.product_id = s2.product_id
+    GROUP BY product_id
 )
-select s.product_id, s.year as first_year, s.quantity, s.price
-from minYear m
-left join groupProd s
-on m.fyear = s.year and m.product_id = s.product_id
